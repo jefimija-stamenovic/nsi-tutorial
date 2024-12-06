@@ -40,6 +40,12 @@ sigurnost aplikacije i efikasno su zaštićene osetljivi podaci i korisničke in
 
 ## :computer: **Pokretanje projekta**
 
+## Kloniranje projekta 
+
+1. **Klonirajte projekat sa Github-a**
+2. **Otvorite folder u Visual Studio Code ili u nekom drugom IDE-u za Python**
+3. **Premestite se u folder *fastapi* tako što ćete u terminalu ukucati *cd fast-api***
+
 ### Virtuelno okruženje
 Pre nego što instaliramo **Python FastAPI** web framework, kreiraćemo virtuelno okruženje (engl. *virtual environment*). 
 Kreiranjem virtuelnog okruženja, omogućena je izolacija biblioteka u Python-u čime se sprečavaju potencijalni konflikti 
