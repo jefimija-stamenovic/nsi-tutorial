@@ -77,7 +77,7 @@ Da bismo pokrenuli naš web server, u terminalu kucamo sledeću komandu
 
 Klikom na sledeći [link](http://127.0.0.1:8000/), u okviru web pretraživača, imaćete sledeći rezultat: 
 
-![hello-world-primer](./resources/images/image.png)
+![hello-world-primer](./fast-api/resources/images/image.png)
 
 Prilikom kreiranja **Python FastAPI** projekta, na [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) 
 je dostupan Swagger UI. Swagger UI je jedan od Swagger alata koji omogućava pregled i interakciju sa API-jima 
@@ -85,13 +85,13 @@ web servera kroz interaktivni web interfejs. Korisnici mogu da vide sve dostupne
 parametre i odgovore API-ja, kao i da direktno testiraju pozive bez nekih dodatnih alata. Trenutni izgled Swagger 
 UI-a je prikazan na slici ispod: 
 
-![izgled-swagger-ui](./resources/images/image-1.png)
+![izgled-swagger-ui](./fast-api/resources/images/image-1.png)
 
 Alternativno, na [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc) je dostupan ReDoc (slika ispod). 
 Redoc je alat otvorenog koda (engl. *open-source*) za automatsko pravljenje API dokumentacije. ReDoc projekat je 
 dostupan na Github-u, tako da možete pogledati projekat na [linku](https://github.com/Redocly/redoc)
 
-![izgled-redoc-ui](./resources/images/image-2.png)
+![izgled-redoc-ui](./fast-api/images/image-2.png)
 
 ### ⚙️ Šta je Uvicorn?
 Sastavni deo FastAPI aplikacije je **Uvicorn**, brz i lagan ASGI (Asynchronous Server Gateway Interface) server koji 
