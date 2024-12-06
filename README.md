@@ -91,7 +91,7 @@ Alternativno, na [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc) je d
 Redoc je alat otvorenog koda (engl. *open-source*) za automatsko pravljenje API dokumentacije. ReDoc projekat je 
 dostupan na Github-u, tako da možete pogledati projekat na [linku](https://github.com/Redocly/redoc)
 
-![izgled-redoc-ui](./fast-api/images/image-2.png)
+![izgled-redoc-ui](./fast-api/resources/images/image-2.png)
 
 ### ⚙️ Šta je Uvicorn?
 Sastavni deo FastAPI aplikacije je **Uvicorn**, brz i lagan ASGI (Asynchronous Server Gateway Interface) server koji 
