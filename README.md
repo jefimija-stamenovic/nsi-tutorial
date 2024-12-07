@@ -85,11 +85,11 @@ Da bismo aktivirali kreirano virtuelno okruženje, u terminalu unosimo sledeću 
 ```bash
 naziv_virtuelnog_okruzenja\Scripts\Activate.ps1
 ```
-Sada kada smo aktivirali virtuelno okruženje, možemo da instaliramo **Python FastAPI** web framework. 
-U terminalu pokrećemo sledeću komandu: 
-```bash
-pip install "fastapi[standard]"
+Sada kada smo aktivirali virtuelno okruženje, možemo da instaliramo sve biblioteke koje su potrebne za pokretanje projekta. U terminalu unesite sledeću komandu: 
+```bash 
+    pip install -r requirements.txt
 ```
+
 U okviru trenutnog foldera u kom radite, kreirajte fajl **main.py** koji će sadržati sledeći kod: 
 
 ```python
