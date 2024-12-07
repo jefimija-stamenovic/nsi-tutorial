@@ -38,6 +38,31 @@ sigurnost aplikacije i efikasno su zaštićene osetljivi podaci i korisničke in
 
 ---
 
+## 🎯 **Prednosti i mane FastAPI-a**
+### Prednosti ###
+1. **Jednostavan za učenje i korišćenje**: FastAPI je dizajniran tako da bude jednostavan,
+naročito za Python programere. Sintaksa je intuitivna, a automatsko generisanje 
+dokumentacije olakšava rad programera i održavanje aplikacije. 
+2. **Visoke performanse**: FastAPI je jedan od najbržih web framework-a 
+zahvaljujući podršci za asinhrono programiranje i efikasnim rukovanjem podacima. Aplikacije mogu
+da obrađuju veliki broj zahteva pri čemu neće doći do njenog usporenja. 
+3. **Automatska validacija podataka**: FastAPI automatski vrši validaciju podataka na osnovu prethodno 
+definisanih struktura podataka korišćenjem Python type hintova, čime je smanjena mogućnost za nastanak 
+grešaka uzrokovanih neispravnim unosom.
+4. **Autentifikacija i autorizacija**: Jednostavno se upravlja autentifikacijom i autorizacijom
+bez obzira da li se koristi JWT, OAuth2 ili nešto drugo. 
+5. **Middleware**: Lako se dodaju middleware-i za logovanje, autentifikaciju itd. 
+
+### Mane ###
+
+1. **Učenje**: Iako je FastAPI prilagođen programerima, može biti izazovan za one koji se 
+nisu susretali sa asinhronim programiranjem ili web framework-ovima generalno.
+2. **Community zajednica i dokumentacija**: Iako community zajednica FastAPI-a
+brzo raste, ona i dalje nije toliko velika kao kod nekih drugih popularnih web 
+framework-a što rezultira manjkom tutorijala itd. 
+
+---
+
 ## :computer: **Pokretanje projekta**
 
 ## Kloniranje projekta 
@@ -126,32 +151,6 @@ FastAPI koristi standardne Python tipove podataka (kao što su int, str, float..
 - [Zvanična dokumentacija](https://fastapi.tiangolo.com)  
 - [Primeri na GitHub-u](https://github.com/tiangolo/fastapi)  
 - [GeeksForGeeks](https://www.geeksforgeeks.org/fastapi-introduction/)
-
----
-
-
-## 🎯 **Prednosti i mane FastAPI-a**
-### Prednosti ###
-1. **Jednostavan za učenje i korišćenje**: FastAPI je dizajniran tako da bude jednostavan,
-naročito za Python programere. Sintaksa je intuitivna, a automatsko generisanje 
-dokumentacije olakšava rad programera i održavanje aplikacije. 
-2. **Visoke performanse**: FastAPI je jedan od najbržih web framework-a 
-zahvaljujući podršci za asinhrono programiranje i efikasnim rukovanjem podacima. Aplikacije mogu
-da obrađuju veliki broj zahteva pri čemu neće doći do njenog usporenja. 
-3. **Automatska validacija podataka**: FastAPI automatski vrši validaciju podataka na osnovu prethodno 
-definisanih struktura podataka korišćenjem Python type hintova, čime je smanjena mogućnost za nastanak 
-grešaka uzrokovanih neispravnim unosom.
-4. **Autentifikacija i autorizacija**: Jednostavno se upravlja autentifikacijom i autorizacijom
-bez obzira da li se koristi JWT, OAuth2 ili nešto drugo. 
-5. **Middleware**: Lako se dodaju middleware-i za logovanje, autentifikaciju itd. 
-
-### Mane ###
-
-1. **Učenje**: Iako je FastAPI prilagođen programerima, može biti izazovan za one koji se 
-nisu susretali sa asinhronim programiranjem ili web framework-ovima generalno.
-2. **Community zajednica i dokumentacija**: Iako community zajednica FastAPI-a
-brzo raste, ona i dalje nije toliko velika kao kod nekih drugih popularnih web 
-framework-a što rezultira manjkom tutorijala itd. 
 
 ---
 
