@@ -89,18 +89,9 @@ Sada kada smo aktivirali virtuelno okruženje, možemo da instaliramo sve biblio
 ```bash 
     pip install -r requirements.txt
 ```
+U ovom projektu će biti korišćena MySQL baza podataka i zato je potrebno da kreirate bazu sa podešavanjima prikazanim na slici ispod:
+![db-schema](./fast-api/resources/images/image_db.png)
 
-U okviru trenutnog foldera u kom radite, kreirajte fajl **main.py** koji će sadržati sledeći kod: 
-
-```python
-from fastapi import FastAPI
-
-app = FastAPI()
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-```
 Da bismo pokrenuli naš web server, u terminalu kucamo sledeću komandu 
 ```bash
    fastapi dev main.py

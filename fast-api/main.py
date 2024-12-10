@@ -1,22 +1,15 @@
-from fastapi import FastAPI, APIRouter
-from UI.product import router as router_product 
-from UI.user import router as router_user 
-from UI.recipe import router as router_recipe 
+from fastapi import FastAPI, Depends, HTTPException
+from database import engine
+import models.user as model_user
+import models.todo as model_todo
 
-app = FastAPI(
-    title = "Napredno softversko inženjerstvo - Tutorial", 
-)
+from UI.users import router as router_user
+from UI.todos import router as router_todo
+
+model_user.Base.metadata.create_all(bind=engine)
+model_todo.Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="Napredno softversko inženjerstvo - tutorial")
 
 app.include_router(router_user)
-app.include_router(router_product)
-app.include_router(router_recipe)
-
-@app.get("/", status_code = 200)
-async def root():
-    return {"message": "Hello World!"}
-
-
-"""if __name__ == "__main__":
-    # Use this for debugging purposes only
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001, log_level="debug")"""
+app.include_router(router_todo)
