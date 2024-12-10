@@ -5,7 +5,7 @@ import schemas.user as schema
 from models.user import User as UserModel
 from models.todo import Todo as TodoModel
 
-def get_user(db: Session, user_id: int):
+def get_user(db: Session, user_id: int) -> UserModel:
     return db.query(User).filter(User.id == user_id).first()
 
 def get_user_by_email(db: Session, email: str):
@@ -29,13 +29,7 @@ def create_user(db: Session, user: schema.UserCreate) -> UserModel:
     return db_user
 
 def delete_user(db: Session, 
-                korisnik_id: int):
-    result = False 
-    user = db.query(User).filter(User.id == korisnik_id).first()
-    if not user:
-        result = False 
-        raise Exception("Korisnik nije pronađen!")
-    db.delete(user)
+                korisnik_za_brisanje: UserModel) -> bool:
+    db.delete(korisnik_za_brisanje)
     db.commit()
-    result = True 
-    return result
+    return True

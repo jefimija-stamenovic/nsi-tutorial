@@ -57,4 +57,10 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
                status_code=HTTPStatus.OK)
 def delete_user(korisnik_id : int, 
                 db: Session = Depends(get_db)) -> schemas.User: 
-    result = service.delete_user(db, korisnik_id)
+    try: 
+        return service.delete_user(db, korisnik_id)
+    except Exception as e: 
+        return HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, 
+            detail=str(e)
+        )

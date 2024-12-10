@@ -39,12 +39,19 @@ def create_user(db: Session,
     
     return db_service.create_user(db, user)
 
-def delete_user(db: Session, 
-                korisnik_id: int): 
-    result = True 
+def delete_user(db: Session, korisnik_id: int): 
+    try:
+        korisnik_za_brisanje = get_user_by_id(db, korisnik_id)
+        if not korisnik_za_brisanje:
+            raise Exception(f"Korisnik sa ID-jem {korisnik_id} ne postoji.")
+        result = db_service.delete_user(db, korisnik_za_brisanje)
+        return result
+    except Exception as e:
+        raise Exception(f"Greška prilikom brisanja korisnika: {str(e)}")
+    
+    """result = None 
     try: 
-        result = db_service.delete_user(db, korisnik_id) 
-        result = False
+        result = schemas.User(**db_service.delete_user(db, korisnik_id))
     except Exception as e: 
         raise Exception(str(e))
-    return result 
+    return result"""
