@@ -1,57 +1,55 @@
 import DAL.users as db_service
-from fastapi import Depends
-from sqlalchemy.orm import Session
 import schemas.user as schemas
+
+from sqlalchemy.orm import Session
 from typing import Sequence
 
-from models.user import User as UserModel
-from models.todo import Todo as TodoModel
-from schemas.user import UserCreate, User
 
 def get_users(db: Session, 
               skip:int=0, 
               limit:int=100) -> Sequence[schemas.User]:
     return db_service.get_users(db, skip, limit)
 
-def get_user_by_id(db: Session, 
-                   user_id: int): 
-    result = db_service.get_user(db, user_id)
-    if not result: 
-        message = f"Korisnik čiji je ID = {user_id} nije pronađen!"
-        raise Exception(message)
-    return 
-
+def find_user_by_id(db: Session, user_id: int) -> schemas.User:
+    user = db_service.find_user_by_id(db, user_id)
+    if user == None: 
+        raise Exception(f"User with ID {user_id} not found")
+    return user
+    
 def get_user_by_email(db: Session, 
                       user_email : str): 
     return db_service.get_user_by_email(db, user_email)
 
-def create_user(db: Session, 
-                user: schemas.UserCreate): 
+def create_user(db: Session, user: schemas.UserCreate):
     if (user.name == ''):
-        raise Exception("Korisnik mora imati uneto ime")
-
+        raise Exception("User must have name!")
     if (user.email == ''): 
-        raise Exception("Korisnik mora imati unetu email adresu")
-    
+        raise Exception("User must have email!")
     existing_user = get_user_by_email(db, user.email)
     if existing_user:
-        raise Exception("Korisnik sa ovim email-om je vec registrovan")
-    
+        raise Exception("There has been already registrated user with this email")
     return db_service.create_user(db, user)
+    #return db_service.create_user(db, user)
 
-def delete_user(db: Session, korisnik_id: int): 
+def delete_user(db: Session, user_id: int) -> schemas.User: 
     try:
-        korisnik_za_brisanje = get_user_by_id(db, korisnik_id)
-        if not korisnik_za_brisanje:
-            raise Exception(f"Korisnik sa ID-jem {korisnik_id} ne postoji.")
-        result = db_service.delete_user(db, korisnik_za_brisanje)
-        return result
-    except Exception as e:
-        raise Exception(f"Greška prilikom brisanja korisnika: {str(e)}")
-    
-    """result = None 
-    try: 
-        result = schemas.User(**db_service.delete_user(db, korisnik_id))
+        user_for_delete = find_user_by_id(db, user_id)
+        deleted = db_service.delete_user(db, user_for_delete)
+        if not deleted: 
+            raise Exception(f"An error occurred. User with ID {user_id} has not been deleted")
+        return deleted
     except Exception as e: 
-        raise Exception(str(e))
-    return result"""
+        raise e
+    
+def update_user(db: Session, user_id: int, user_data: schemas.UserUpdate):
+    try:
+        if (user_data.name == ""):
+            raise Exception("Name cannot be empty.")
+        if (user_data.email == ""):
+            raise Exception("Email cannot be empty.")
+        updated_user = db_service.update_user(db, user_id, user_data.model_dump(exclude_unset=True))
+        if not updated_user:
+            raise Exception("User not found or update failed.")
+        return updated_user
+    except Exception as e:
+        raise e

@@ -8,5 +8,4 @@ class Todo(Base):
     title = Column(String(255), index=True)
     description = Column(String(255), index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
-
-    owner = relationship("User",back_populates="todos")
+    owner = relationship("User", back_populates="todos")
