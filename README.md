@@ -139,12 +139,9 @@ Uvicorn web servera koji prosleđuje zahteve FastAPI aplikaciji
 FastAPI koristi standardne Python tipove podataka (kao što su int, str, float...) za definisanje tipvoa u aplikaciji. FastAPI ima integraciju sa bibliotekom Pydantic koja omogućava jednostavno validiranje i manipulaciju podacima. 
 
 ## 🎓 **Resursi za učenje**
-- [Zvanična dokumentacija](https://fastapi.tiangolo.com)  
+- [FastAPI - Zvanična dokumentacija](https://fastapi.tiangolo.com)  
 - [Primeri na GitHub-u](https://github.com/tiangolo/fastapi)  
 - [GeeksForGeeks](https://www.geeksforgeeks.org/fastapi-introduction/)
+- [Pydantic - Zvanična dokumentacija](https://docs.pydantic.dev/latest/)
 
 ---
-
-
-## 📬 **Kontakt**
-Ukoliko imate nekih pitanja ili želite da doprinesete projektu, pišite nam na **jefimija.stamenovic@gmail.com**
