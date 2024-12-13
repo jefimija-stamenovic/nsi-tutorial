@@ -116,7 +116,14 @@ uvicorn main:app --reload
 Na slici ispod je prikazana arhitektura FastAPI web servera: 
 ![arhitektura-fastapi-servera](https://media.licdn.com/dms/image/v2/D4D12AQG_nawivlNG-Q/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1688666263274?e=2147483647&v=beta&t=tEFDYkFC0DSZdFpB86QNh75rC0P-GiDeocqtPfApug8)
 
-Baš kao i kod bilo kog drugog web servera, i ovde se arhitektura sastoji od klijenta koji šalje HTTP zahteve, Uvicorn web servera koji prosleđuje zahteve FastAPI aplikaciji. 
+Arhitekturu možemo da podelimo na nekoliko segmenata: 
+1. Klijent - šalje HTTP zahteve (GET, POST, PUT, DELETE) na određeni URL (http://localhost:8000/...) putem web pretraživača ili nekog drugog interfejsa kako bi komucirao sa serverom. 
+2. Web server - koristi se Uvicorn - asinhroni server kompatibilan sa ASGI standardom. Ujedno, Uvicorn predstavlja posrednika između klijenta i FastAPI aplikacije tako što prihvata zahteve i prosleđuje ih aplikaciji. 
+3. Sloj aplikacije - predstavlja sloj koji implementira logiju apkikacije koristeći FastAPI framework. U okviru njega ima više komponenti: 
+    1) Logika rutiranja definiše način na koji aplikacija obrađuje pristigle HTTP zahteve. Main.py predstavlja glavni fajl u okviru kog se definišu sve funkcije koje odgovaraju na zahteve. 
+    2) Pydantic modeli se koriste za validaciju i serijalizaciju podataka čime je obezbeđeno da aplikacija ima tačne i konzistentne ulazne i izlazne podatke. Ovim modelima se definiše struktura podataka koji su potrebni za rad aplikacije. Pydantic automatski validira podatke koje klijent šalje i generiše dobro formatirane odgovore čime se značajno obrzava razvoj i smanjuje se mogućnost za nastanak grešaka 
+    3) SQLAlchemyORM se koristi za rad sa bazom podataka na objektno-relacijski način. ORM modelima se definiše struktura podataka koji se čuvaju u bazi podataka i omogućena je jednostavna manpulacija podacima bez direktnog pisanja SQL upita. Modeli su obično deklarisani i implementirani u fajlu *model.py*
+    Pored modela, imamo i fajl *database.py* koji služi za upravljanje konekcijama sa bazom podataka. U okviru ovog fajla se konfiguriše konekcija i sesije koje omogućavaju aplikaciji da komunicira sa bazom. 
 
 # Pydantic
 FastAPI koristi standardne Python tipove podataka (kao što su int, str, float...) za definisanje tipova u aplikaciji. FastAPI ima integraciju sa bibliotekom 
