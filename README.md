@@ -76,6 +76,7 @@ Sada kada smo aktivirali virtuelno okruženje, možemo da instaliramo sve biblio
     pip install -r requirements.txt
 ```
 U ovom projektu će biti korišćena MySQL baza podataka i zato je potrebno da kreirate bazu sa podešavanjima prikazanim na slici ispod:
+
 ![db-schema](./fast-api/resources/images/image_db.png)
 
 Da bismo pokrenuli naš web server, u terminalu kucamo sledeću komandu 
