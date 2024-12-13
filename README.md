@@ -7,7 +7,7 @@ Dizajniran je tako da bude jednostavan za korišćenje, ali ujedno i efikasan i 
 
 ## 🎯 **Karakteristike FastAPI-a**
 
-## Ključne karakteristike FastAPI-ja
+### Ključne karakteristike FastAPI-ja
 
 1. **Automatsko dokumentovanje API-a**: FastAPI automatski generiše interaktivnu dokumentaciju API-ja koristeći OpenAPI standard. Pregled dokumentacije je dostupan na posebno definisanim krajnjim tačkama (engl. *endpoints*) u aplikaciji što olakšava razumevanje i testiranje API-ja. Ovim se štedi vreme jer nema potrebe za ručnim pisanjem opširne dokumentacije. 
 
