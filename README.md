@@ -1,7 +1,8 @@
 # 🌟 Python FastAPI - Tutorijal
 
-FastAPI je moderan, brz (high-performance) Python web framework za kreiranje API-a. 
-Dizajniran je tako da bude jednostavan za korišćenje, ali ujedno i efikasan i pouzdan što ga je učinilo jednim od čestih izbora programera za razvoj RESTful API-ja i web aplikacija. Svoju popularnost je stekao zbog jednostavnosti, automatskog generisanja dokumentacije i veoma dobrih performansi. 
+# Problematika #
+FastAPI je Python framework koji je kreiran sa ciljem da ubrza proces razvoja i da unapredi kvalitet web API-ja. Sam razvoj API-ja uključuje različite izazove poput ručne validacije podataka, održavanje dokumentacije, kao i postizanje visokih performansi naročito pri obradi velikih količina zahteva. 
+FastAPI rešava ove probleme jer pruža automatsku validaciju, automatsko generisanje dokumentacije u realnom vremenu i podršku za asinhroni rad. Pored toga, FastAPI koristi Python tipove za tipsku sigurnost čime se smanjuje broj grešaka i povećava pouzdanost koda čineći sam razvoj efikasnijim i manje podložnim greškama.  
 
 ---
 
@@ -120,9 +121,9 @@ Arhitekturu možemo da podelimo na nekoliko segmenata:
 1. Klijent - šalje HTTP zahteve (GET, POST, PUT, DELETE) na određeni URL (http://localhost:8000/...) putem web pretraživača ili nekog drugog interfejsa kako bi komucirao sa serverom. 
 2. Web server - koristi se Uvicorn - asinhroni server kompatibilan sa ASGI standardom. Ujedno, Uvicorn predstavlja posrednika između klijenta i FastAPI aplikacije tako što prihvata zahteve i prosleđuje ih aplikaciji. 
 3. Sloj aplikacije - predstavlja sloj koji implementira logiju apkikacije koristeći FastAPI framework. U okviru njega ima više komponenti: 
-    1) Logika rutiranja definiše način na koji aplikacija obrađuje pristigle HTTP zahteve. Main.py predstavlja glavni fajl u okviru kog se definišu sve funkcije koje odgovaraju na zahteve. 
-    2) Pydantic modeli se koriste za validaciju i serijalizaciju podataka čime je obezbeđeno da aplikacija ima tačne i konzistentne ulazne i izlazne podatke. Ovim modelima se definiše struktura podataka koji su potrebni za rad aplikacije. Pydantic automatski validira podatke koje klijent šalje i generiše dobro formatirane odgovore čime se značajno obrzava razvoj i smanjuje se mogućnost za nastanak grešaka 
-    3) SQLAlchemyORM se koristi za rad sa bazom podataka na objektno-relacijski način. ORM modelima se definiše struktura podataka koji se čuvaju u bazi podataka i omogućena je jednostavna manpulacija podacima bez direktnog pisanja SQL upita. Modeli su obično deklarisani i implementirani u fajlu *model.py*
+    1) *Logika rutiranja* definiše način na koji aplikacija obrađuje pristigle HTTP zahteve. Main.py predstavlja glavni fajl u okviru kog se definišu sve funkcije koje odgovaraju na zahteve. 
+    2) *Pydantic modeli* se koriste za validaciju i serijalizaciju podataka čime je obezbeđeno da aplikacija ima tačne i konzistentne ulazne i izlazne podatke. Ovim modelima se definiše struktura podataka koji su potrebni za rad aplikacije. Pydantic automatski validira podatke koje klijent šalje i generiše dobro formatirane odgovore čime se značajno obrzava razvoj i smanjuje se mogućnost za nastanak grešaka 
+    3) *SQLAlchemyORM* se koristi za rad sa bazom podataka na objektno-relacijski način. ORM modelima se definiše struktura podataka koji se čuvaju u bazi podataka i omogućena je jednostavna manpulacija podacima bez direktnog pisanja SQL upita. Modeli su obično deklarisani i implementirani u fajlu *model.py*
     Pored modela, imamo i fajl *database.py* koji služi za upravljanje konekcijama sa bazom podataka. U okviru ovog fajla se konfiguriše konekcija i sesije koje omogućavaju aplikaciji da komunicira sa bazom. 
 
 # Pydantic
