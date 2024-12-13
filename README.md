@@ -1,7 +1,7 @@
 # 🌟 Python FastAPI - Tutorijal
 
 # Problematika #
-FastAPI je Python framework koji je kreiran sa ciljem da ubrza proces razvoja i da unapredi kvalitet web API-ja. Sam razvoj API-ja uključuje različite izazove poput ručne validacije podataka, održavanje dokumentacije, kao i postizanje visokih performansi naročito pri obradi velikih količina zahteva. 
+FastAPI je Python framework kreiran sa ciljem da ubrza razvoj i unapredi kvalitet web API-ja. Sam razvoj API-ja uključuje različite izazove poput ručne validacije podataka, održavanje dokumentacije i postizanja visokih performansi naročito pri obradi velikih količina zahteva. 
 FastAPI rešava ove probleme jer pruža automatsku validaciju, automatsko generisanje dokumentacije u realnom vremenu i podršku za asinhroni rad. Pored toga, FastAPI koristi Python tipove za tipsku sigurnost čime se smanjuje broj grešaka i povećava pouzdanost koda čineći sam razvoj efikasnijim i manje podložnim greškama.  
 
 ---
