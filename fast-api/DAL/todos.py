@@ -3,7 +3,9 @@ from models.todo import Todo
 from typing import Sequence 
 
 def create_todo(db:Session, todo:Todo) -> Todo:
-    new_todo = Todo(title=todo.title, description=todo.description, owner_id=todo.owner_id)
+    new_todo = Todo(title=todo.title, 
+                    description=todo.description, 
+                    owner_id=todo.owner_id)
     db.add(new_todo)
     db.commit()
     db.refresh(new_todo)

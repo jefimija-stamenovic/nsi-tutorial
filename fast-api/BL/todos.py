@@ -1,15 +1,15 @@
 import DAL.todos as db_service
-from sqlalchemy.orm import Session
 import schemas.todo as schemas
+from sqlalchemy.orm import Session
 from typing import Sequence 
 
 def get_todo_by_id(db:Session, todo_id: int): 
     return db_service.get_todo_by_id(db, todo_id)
 
 def create_todo(db:Session, new_todo:schemas.Todo) -> Sequence[schemas.Todo]:
-    if not new_todo.title or not new_todo.owner_id:
+    if (not new_todo.title) or (not new_todo.owner_id):
         raise ValueError("Title and owner ID are required!")
-    return db_service.create_todo(new_todo)
+    return db_service.create_todo(db, new_todo)
 
 def get_todos(db:Session, owner_id: int):
     return db_service.get_todos(db, owner_id)
@@ -26,7 +26,6 @@ def update_todo(db: Session, user_id: int, todo_data: schemas.TodoUpdate) -> sch
         return update_todo
     except Exception as e:
         raise e
-
 
 def delete_todo(db: Session, todo_id: int) -> schemas.Todo: 
     try:

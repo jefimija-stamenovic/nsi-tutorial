@@ -44,3 +44,16 @@ def delete_todo(todo_id : int,
             status_code=HTTPStatus.INTERNAL_SERVER_ERROR, 
             detail=str(e)
         )
+
+@router.post('/', 
+            status_code = HTTPStatus.CREATED, 
+            name = "Create todo", 
+            description = "Create todo")
+def create_todo(new_todo: schemas.Todo, db:Session = Depends(get_db)): 
+    try: 
+        return service.create_todo(db, new_todo)
+    except Exception as e: 
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, 
+            detail=str(e)
+        )
