@@ -1,6 +1,5 @@
 # 🌟 Python FastAPI - Tutorijal
 
-## Problematika ##
 FastAPI je moderan, brz (high-performance) Python web framework za kreiranje API-a. 
 Dizajniran je tako da bude jednostavan za korišćenje, ali ujedno i efikasan i pouzdan što ga je učinilo jednim od čestih izbora programera za razvoj RESTful API-ja i web aplikacija. Svoju popularnost je stekao zbog jednostavnosti, automatskog generisanja dokumentacije i veoma dobrih performansi. 
 
