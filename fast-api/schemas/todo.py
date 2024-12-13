@@ -1,9 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import List, Optional
 
 class TodoBase(BaseModel):
     title: str
-    description: Optional[str] = None
+    description: Optional[str]
+    model_config = ConfigDict(from_attributes=True)
 
 class TodoCreate(TodoBase):
     pass
@@ -12,5 +13,5 @@ class Todo(TodoBase):
     id: int
     owner_id: int
 
-    class Config:
-        orm_mode = True
+class TodoUpdate(TodoBase): 
+    pass 

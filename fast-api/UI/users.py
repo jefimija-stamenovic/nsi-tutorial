@@ -50,7 +50,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 @router.delete('/',  
                status_code=HTTPStatus.NO_CONTENT, 
                name="Delete user", 
-               description="The API delets user by ID")
+               description="The API deletes user by ID")
 def delete_user(user_id : int, 
                 db: Session = Depends(get_db)): 
     try: 
@@ -66,7 +66,8 @@ def delete_user(user_id : int,
             response_model=schemas.UserUpdate, 
             name = "Update user", 
             description="The API update user by ID")
-def update_user(user_id: int, user_data: schemas.UserUpdate, db: Session = Depends(get_db)):
+def update_user(user_id: int, user_data: schemas.UserUpdate, 
+                db: Session = Depends(get_db)):
     try:
         updated_user = service.update_user(db, user_id, user_data)
         return updated_user
