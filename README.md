@@ -1,7 +1,7 @@
 # 🌟 Python FastAPI - Tutorijal
 
-# Problematika #
-FastAPI je Python framework kreiran sa ciljem da ubrza razvoj i unapredi kvalitet web API server-a. Sam razvoj API-ja uključuje različite izazove poput ručne validacije podataka, održavanje dokumentacije i postizanja visokih performansi naročito pri obradi velikih količina zahteva. 
+## Problematika ##
+FastAPI je Python framework kreiran sa ciljem da ubrza razvoj i unapredi kvalitet web API server-a. Sam razvoj API-ja uključuje različite izazove poput ručne validacije podataka, održavanja dokumentacije i postizanja visokih performansi naročito pri obradi velikih količina zahteva. 
 FastAPI rešava ove probleme jer pruža automatsku validaciju, automatsko generisanje dokumentacije u realnom vremenu i podršku za asinhroni rad. Pored toga, FastAPI koristi Python tipove za tipsku sigurnost čime se smanjuje broj grešaka i povećava pouzdanost koda čineći sam razvoj efikasnijim i manje podložnim greškama.  
 
 ---
@@ -49,10 +49,8 @@ framework-a što rezultira manjkom tutorijala itd.
 
 ## Zašto baš FastAPI? Ko su njegovi konkurenti? 
 U odnosu na svoje konkurente poput Flask-a i Django-a, FastAPI balansira između brzog razvoja, jednostavnosti i modernih, tehničkih mogućnosti.
-Flask je poznat po svojoj fleksibilnosti, ali programeri ulažu dodatno vreme na validaciji podataka, ručnom generisanju dokumentacije i obradi većeg broja zahteva. 
-Django, kao drugi konkurent, nudi robusna rešenja, ali sa dodatnim slojevima kompleksnosti koji i nisu neophodni za razvoj API-ja. 
+Flask je poznat po svojoj fleksibilnosti, ali programeri ulažu dodatno vreme na validaciji podataka, ručnom generisanju dokumentacije i obradi većeg broja zahteva.  <br> Django, kao drugi konkurent, nudi robusna rešenja, ali sa dodatnim slojevima kompleksnosti koji i nisu neophodni za razvoj API-ja. <br> Prilikom korišćenja FastAPI-ja, programeri se fokusiraju na samu logiku poslovanja, bez da gube vreme na tehničke detalje poput validacije ulaznih i izlaznih podataka ili kreiranja propratne dokumentacije. Sem toga, njegova podrška za asinhroni rad, integracija sa Python tipovima i kompatibilnost sa OpenAPI-em ga čini kao adekvatnim izborom koji objedinjuje brzinu, sigurnost i efikasnost. 
 
-Prilikom korišćenja FastAPI-ja, programeri se fokusiraju na samu logiku poslovanja, bez da gube vreme na tehničke detalje poput validacije ulaznih i izlaznih podataka ili kreiranja propratne dokumentacije. Sem toga, njegova podrška za asinhroni rad, integracija sa Python tipovima i kompatibilnost sa OpenAPI-em ga čini kao adekvatnim izborom koji objedinjuje brzinu, sigurnost i efikasnost. 
 ---
 
 ## :computer: **Pokretanje projekta**
