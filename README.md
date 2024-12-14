@@ -132,14 +132,16 @@ Arhitekturu možemo da podelimo na nekoliko segmenata:
     3) *SQLAlchemyORM* se koristi za rad sa bazom podataka na objektno-relacijski način. ORM modelima se definiše struktura podataka koji se čuvaju u bazi podataka i omogućena je jednostavna manpulacija podacima bez direktnog pisanja SQL upita. Modeli su obično deklarisani i implementirani u fajlu *model.py*
     Pored modela, imamo i fajl *database.py* koji služi za upravljanje konekcijama sa bazom podataka. U okviru ovog fajla se konfiguriše konekcija i sesije koje omogućavaju aplikaciji da komunicira sa bazom. 
 
-# Pydantic
-FastAPI koristi standardne Python tipove podataka (kao što su int, str, float...) za definisanje tipova u aplikaciji. FastAPI ima integraciju sa bibliotekom 
-Pydantic koja omogućava jednostavno validiranje i manipulaciju podacima. 
+# Pydantic i Logfire
+FastAPI koristi standardne Python tipove podataka (int, str, float...) za definisanje tipova u aplikaciji, pa je sam kod čitljiv i lako razumljiv. 
+Zahvaljujući integraciji sa bibliotekom **Pydantic**, FastAPI pruža veoma korisne alate za jednostavnu validaciju i manipulaciju podacima. 
+Tim koji je razvio Pydantic, kreirao je još jedan alat **Logfire** čija je namena monitoring aplikacija. Logfire je dizajniran tako da bude jednostavan, a ujedno i efikasan za upotrebu. Integrisan je sa mnogim popularnim bibliotekama (FastAPI, OpenAI, sam Pydantic i dr.) što omogućava njegovu upotrebu za praćenje validacija u Pydantic-u i jasnije razumevanje zašto neki unosi ne ispunjavaju uslove validacije. 
 
 ## 🎓 **Resursi za učenje**
 - [FastAPI - Zvanična dokumentacija](https://fastapi.tiangolo.com)  
 - [Primeri na GitHub-u](https://github.com/tiangolo/fastapi)  
 - [GeeksForGeeks](https://www.geeksforgeeks.org/fastapi-introduction/)
 - [Pydantic - Zvanična dokumentacija](https://docs.pydantic.dev/latest/)
+- [Microsoft Visual Studio Code](https://code.visualstudio.com/docs/python/tutorial-fastapi)
 
 ---
