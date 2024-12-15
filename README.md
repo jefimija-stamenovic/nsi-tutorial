@@ -159,6 +159,32 @@ Primer nevalidnog unosa email adrese i odgovora servera:
 ![nevalidan-mejl](./fast-api/resources/images/nevalidan-mejl.png)
 ![odgovor-servera](./fast-api/resources/images/odgovor-servera-nevalidan-mejl.png)
 
+## Konfiguracija baze podataka 
+
+U okviru fajla database.py je konfigurisana konekcija ka prethodno kreiranoj MySQL bazi podataka. Kod je prikazan ispod: 
+```python
+    from sqlalchemy import create_engine
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.orm import sessionmaker
+    from dotenv import load_dotenv
+    import os
+
+    load_dotenv()
+
+    DB_URL = os.getenv("DB_URL", "mysql+pymysql://root:root@localhost:3306/fast_api_sample")
+    engine = create_engine(DB_URL,echo=True)
+    SessionLocal = sessionmaker(autocommit=False,autoflush=False, bind=engine)
+
+    Base = declarative_base()
+```
+Sami parametri za konekciju su definisani u okviru fajla .env koji treba ručno da kreirate. Kod koji je prikazan ispod iskopirajte i promenite parametre tako da odgovaraju vašem MySQL serveru: 
+```bash 
+DB_URL = "mysql+pymysql://root:root@localhost:3306/fast_api_sample"
+HOST = "localhost"
+PORT = 8000
+```
+U .env fajlu se, osim DB_URL konstante, nalaze i HOST i PORT konstante kojima se definišu host i port za pokretanje servera. One se učitavaju u main.py fajlu, tako da slobodno možete da ih promenite ukoliko želite da Vaš server radi na nekom drugom portu ili ukoliko želite da bude javno dostupan. 
+
 ## 🎓 **Resursi za učenje**
 - [FastAPI - Zvanična dokumentacija](https://fastapi.tiangolo.com)  
 - [Primeri na GitHub-u](https://github.com/tiangolo/fastapi)  

@@ -13,6 +13,7 @@ class UserBase(BaseModel):
         if not name.isalpha(): 
             raise ValueError("Name must contain only alphabetic characters!")
         return name
+    
 class UserCreate(UserBase):
     todos: List[TodoCreate] = []
 
