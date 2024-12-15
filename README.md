@@ -12,7 +12,7 @@ FastAPI rešava ove probleme jer pruža automatsku validaciju, automatsko generi
 
 1. **Automatsko dokumentovanje API-a**: FastAPI automatski generiše interaktivnu dokumentaciju API-ja koristeći OpenAPI standard. Pregled dokumentacije je dostupan na posebno definisanim krajnjim tačkama (engl. *endpoints*) u aplikaciji što olakšava razumevanje i testiranje API-ja. Ovim se štedi vreme jer nema potrebe za ručnim pisanjem opširne dokumentacije. 
 
-2. **Python type hintovi**: Jedna od najbitnijih prednosti FastAPI-ja je upotreba Python type hintova. Parametri i povratne vrednosti funkcija se anotiraju čime se značajno poboljšava čitljivost koda. Osim toga, FastAPI automatski obavlja validaciju ulaznih podataka i generiše API dokumentaciju. 
+2. **Python type hintovi**: Jedna od najbitnijih prednosti FastAPI-ja je upotreba Python type hintova. Parametri i povratne vrednosti funkcija se anotiraju čime se značajno poboljšava čitljivost koda. 
 
 3. **Validacija podataka**: FastAPI koristi **Pydantic** modele za automatsko proveravanje ispravnosti podataka. Pomoću Pydantic šema, mogu se jasno definisati pravila i struktura očekivanih podataka. Na ovaj način, ulazni podaci se proveravaju automatski, pretvaraju se u odgovarajuće formate i pripremaju se za dalju obradu čime je značajno smanjen rizik od rada sa neispravnim ili nepravilnim podacima. 
 
@@ -43,7 +43,7 @@ bez obzira da li se koristi JWT, OAuth2 ili nešto drugo.
 nisu susretali sa asinhronim programiranjem ili web framework-ovima generalno.
 2. **Community zajednica i dokumentacija**: Iako community zajednica FastAPI-a
 brzo raste, ona i dalje nije toliko velika kao kod nekih drugih popularnih web 
-framework-a što rezultira manjkom tutorijala itd. 
+framework-a.
 
 ---
 
@@ -86,9 +86,44 @@ U ovom projektu će biti korišćena MySQL baza podataka i zato je potrebno da k
 
 ![db-schema](./fast-api/resources/images/image_db.png)
 
+Glavni fajl ovog projekta je main.py čiji je kod dat ispod:
+```python 
+from fastapi import FastAPI
+from database import engine
+from UI.users import router as router_user
+from UI.todos import router as router_todo
+from dotenv import load_dotenv
+import models.user as model_user
+import models.todo as model_todo
+import os 
+
+model_user.Base.metadata.create_all(bind=engine)
+model_todo.Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="Napredno softversko inženjerstvo - FastAPI tutorial")
+app.include_router(router_user)
+app.include_router(router_todo)
+
+load_dotenv()
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello, this is tutorial for FastAPI!"}
+
+if __name__ == "__main__":
+    import uvicorn
+    HOST = os.getenv("HOST", "127.0.0.1")
+    PORT = int(os.getenv("PORT", 8000))
+    uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
+```
+
 Da bismo pokrenuli naš web server, u terminalu kucamo sledeću komandu 
 ```bash
    fastapi dev main.py
+```
+ili 
+```bash
+python main.py
 ```
 
 Klikom na sledeći [link](http://127.0.0.1:8000/), u okviru web pretraživača, imaćete sledeći rezultat: 
@@ -109,15 +144,6 @@ dostupan na Github-u, tako da možete pogledati projekat na [linku](https://gith
 
 ![izgled-redoc-ui](./fast-api/resources/images/image-2.png)
 
-### ⚙️ Šta je Uvicorn?
-Sastavni deo FastAPI aplikacije je **Uvicorn**, brz i lagan ASGI (Asynchronous Server Gateway Interface) server koji omogućava pokretanje aplikacije i obradu korisničkih zahteva. Uvicorn obezbeđuje brzu i pre svega efikasnu komunikaciju 
-klijenta i servera, pri čemu podržava i moderne tehnologije kao što su HTTP/2 i WebSocket. Integracija FastAPI-a i Uvicorn-a garantuje visoke performanse i stabilan rad aplikacije što ga čini pogodnim za produkciju. 
-
-Alternativno pokretanje projekta korišćenjem uvicorn-a je: 
-```bash
-uvicorn main:app --reload
-```
-
 ### Arhitektura FastAPI web servera
 
 Na slici ispod je prikazana arhitektura FastAPI web servera: 
@@ -131,8 +157,24 @@ Arhitekturu možemo da podelimo na nekoliko segmenata:
     2) *Pydantic modeli* se koriste za validaciju i serijalizaciju podataka čime je obezbeđeno da aplikacija ima tačne i konzistentne ulazne i izlazne podatke. Ovim modelima se definiše struktura podataka koji su potrebni za rad aplikacije. Pydantic automatski validira podatke koje klijent šalje i generiše dobro formatirane odgovore čime se značajno obrzava razvoj i smanjuje se mogućnost za nastanak grešaka 
     3) *SQLAlchemyORM* se koristi za rad sa bazom podataka na objektno-relacijski način. ORM modelima se definiše struktura podataka koji se čuvaju u bazi podataka i omogućena je jednostavna manpulacija podacima bez direktnog pisanja SQL upita. Modeli su obično deklarisani i implementirani u fajlu *model.py*
     Pored modela, imamo i fajl *database.py* koji služi za upravljanje konekcijama sa bazom podataka. U okviru ovog fajla se konfiguriše konekcija i sesije koje omogućavaju aplikaciji da komunicira sa bazom. 
-
 ---
+
+### ⚙️ Šta je Uvicorn?
+Sastavni deo FastAPI aplikacije je **Uvicorn**, brz i lagan ASGI (Asynchronous Server Gateway Interface) server koji omogućava pokretanje aplikacije i obradu korisničkih zahteva. Uvicorn obezbeđuje brzu i pre svega efikasnu komunikaciju 
+klijenta i servera, pri čemu podržava i moderne tehnologije kao što su HTTP/2 i WebSocket. Integracija FastAPI-a i Uvicorn-a garantuje visoke performanse i stabilan rad aplikacije što ga čini pogodnim za produkciju. 
+
+Ukoliko zakomentarišete sledeći deo u main.py
+```python 
+if __name__ == "__main__":
+    import uvicorn
+    HOST = os.getenv("HOST", "127.0.0.1")
+    PORT = int(os.getenv("PORT", 8000))
+    uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
+```
+možete alternativno pokrenuti projekat korišćenjem uvicorn-a: 
+```bash
+uvicorn main:app --reload
+```
 
 ## Konfiguracija baze podataka 
 
