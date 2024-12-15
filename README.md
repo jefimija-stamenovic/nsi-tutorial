@@ -237,10 +237,10 @@ Za Todo tabelu je karakteristično da ima referencu na tabelu Users jer zadatak 
 back_populates="owner", cascade="all, delete")
 ```
 ## Troslojna arhitektura ##
-
+Arhitektura DAL-BL-UI je arhitektura projekta koja obezbeđuje modularnost, olakšava održavanje i omogućava nezavisne izmene svakog sloja. 
 ### Data Access Layer (DAL)
-DAL (Data Access Layer) sloj koji služi za manipulaciju podacima iz baze podataka. Komunicira direktno sa bazom i izvršava CRUD operacije.
-DAL sloj za manipulaciju korisnicima: 
+DAL (Data Access Layer) sloj koji služi za manipulaciju podacima iz baze podataka. Na nivou DAL sloja definišemo sve funkcije koje su nam potrebne da manipulišemo podacima iz baze podataka - kreiranje, brisanje, ažuriranje i uzimanje podataka. Sem toga, možemo pisati i neke dodatne funkcije za traženje/filtriranje podataka. Primer funkcija na DAL nivou su prikazane ispod: 
+
 ```python 
 from sqlalchemy.orm import Session
 from models.user import User
@@ -284,6 +284,67 @@ def update_user(db: Session, user_id: int, updated_user: User) -> User | None:
     db.refresh(user)
     return user
 ```
+### Bussiness Layer (DAL)
+Ovaj sloj služi za implementiranje pravila poslovanja i funkcionalnosti aplikacije. Preuzima podatke od sloja iznad sebe - UI, a prosleđuje ih sloju ispod sebe - DAL. BL sloj je uglavnom sloj u kom su definisani servisi koji pozivaju DAL sloj i sprovode validaciju, transformaciju ili neku drugu logiku nad preuzetim podacima. 
+Primer BL sloja: 
+```python 
+
+import DAL.users as db_service
+import schemas.user as schemas
+from sqlalchemy.orm import Session
+from typing import Sequence
+
+
+def get_users(db: Session, 
+              skip:int=0, 
+              limit:int=100) -> Sequence[schemas.User]:
+    return db_service.get_users(db, skip, limit)
+
+def find_user_by_id(db: Session, user_id: int) -> schemas.User:
+    user = db_service.find_user_by_id(db, user_id)
+    if user == None: 
+        raise Exception(f"User with ID {user_id} not found")
+    return user
+    
+def get_user_by_email(db: Session, 
+                      user_email : str): 
+    return db_service.get_user_by_email(db, user_email)
+
+def create_user(db: Session, user: schemas.UserCreate):
+    if (user.name == ''):
+        raise Exception("User must have name!")
+    if (user.email == ''): 
+        raise Exception("User must have email!")
+    existing_user = get_user_by_email(db, user.email)
+    if existing_user:
+        raise Exception("There has been already registrated user with this email")
+    return db_service.create_user(db, user)
+    #return db_service.create_user(db, user)
+
+def delete_user(db: Session, user_id: int) -> schemas.User: 
+    try:
+        user_for_delete = find_user_by_id(db, user_id)
+        deleted = db_service.delete_user(db, user_for_delete)
+        if not deleted: 
+            raise Exception(f"An error occurred. User with ID {user_id} has not been deleted")
+        return deleted
+    except Exception as e: 
+        raise e
+    
+def update_user(db: Session, user_id: int, user_data: schemas.UserUpdate):
+    try:
+        if (user_data.name == ""):
+            raise Exception("Name cannot be empty.")
+        if (user_data.email == ""):
+            raise Exception("Email cannot be empty.")
+        updated_user = db_service.update_user(db, user_id, user_data.model_dump(exclude_unset=True))
+        if not updated_user:
+            raise Exception("User not found or update failed.")
+        return updated_user
+    except Exception as e:
+        raise e
+``` 
+
 
 ---
 
