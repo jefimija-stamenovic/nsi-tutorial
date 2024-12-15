@@ -132,32 +132,7 @@ Arhitekturu možemo da podelimo na nekoliko segmenata:
     3) *SQLAlchemyORM* se koristi za rad sa bazom podataka na objektno-relacijski način. ORM modelima se definiše struktura podataka koji se čuvaju u bazi podataka i omogućena je jednostavna manpulacija podacima bez direktnog pisanja SQL upita. Modeli su obično deklarisani i implementirani u fajlu *model.py*
     Pored modela, imamo i fajl *database.py* koji služi za upravljanje konekcijama sa bazom podataka. U okviru ovog fajla se konfiguriše konekcija i sesije koje omogućavaju aplikaciji da komunicira sa bazom. 
 
-# Pydantic i Logfire
-FastAPI koristi standardne Python tipove podataka (int, str, float...) za definisanje tipova u aplikaciji, pa je sam kod čitljiv i lako razumljiv. 
-Zahvaljujući integraciji sa bibliotekom **Pydantic**, FastAPI pruža veoma korisne alate za jednostavnu validaciju i manipulaciju podacima. 
-Tim koji je razvio Pydantic, kreirao je još jedan alat **Logfire** čija je namena monitoring aplikacija. Logfire je dizajniran tako da bude jednostavan, a ujedno i efikasan za upotrebu. Integrisan je sa mnogim popularnim bibliotekama (FastAPI, OpenAI, sam Pydantic i dr.) što omogućava njegovu upotrebu za praćenje validacija u Pydantic-u i jasnije razumevanje zašto neki unosi ne ispunjavaju uslove validacije. 
-Primer jedne validacije korišćenjem Pydantic biblioteke: 
-
-```python 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
-from schemas.todo import Todo, TodoCreate
-from typing import List, Optional
-
-class UserBase(BaseModel):
-    email: EmailStr
-    name: str = Field(min_length=3, max_length=50)
-    
-    model_config = ConfigDict(from_attributes=True)
-
-    @field_validator("name")
-    def name_validator(cls, name: str): 
-        if not name.isalpha(): 
-            raise ValueError("Name must contain only alphabetic characters!")
-        return name
-```
-Primer nevalidnog unosa email adrese i odgovora servera: 
-![nevalidan-mejl](./fast-api/resources/images/nevalidan-mejl.png)
-![odgovor-servera](./fast-api/resources/images/odgovor-servera-nevalidan-mejl.png)
+---
 
 ## Konfiguracija baze podataka 
 
@@ -186,10 +161,14 @@ PORT = 8000
 U .env fajlu se, osim DB_URL konstante, nalaze i HOST i PORT konstante kojima se definišu host i port za pokretanje servera. One se učitavaju u main.py fajlu, tako da slobodno možete da ih promenite ukoliko želite da Vaš server radi na nekom drugom portu ili ukoliko želite da bude javno dostupan. 
 
 # SQLAlchemy ORM 
+SQLAlchemy je Python biblioteka za rad sa bazama podataka i u kombinaciji sa FastAPI-em omogućava efikasno upravljanje podacima. SQLAlchemy ima podršku za Object-Relational Mapping (ORM), pa samim tim omogućava mapiranje klasa na tabele u bazi. FastAPI koristi SQLAlchemy za: 
+- definisanje modela - klase se mapiraju na tabele u bazi podataka 
+- upravljanje sesijama - u sklopu biblioteke SQLAlchemy, postoji implementirana klasa Session koja služi za transakcije i rad sa bazom 
+- CRUD operacije - kreiranje, čitanje, ažuriranje i brisanje podataka 
 
 Primer kreiranja jedne tabele korišćenjem biblioteke SQLAlchemy
 ```python 
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -201,6 +180,14 @@ class User(Base):
     todos = relationship("Todo", back_populates="owner", cascade="all, delete")
     is_active = Column(Boolean, default=False)
     
+class Todo(Base):
+    __tablename__ = "todos"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String(255), index=True)
+    description = Column(String(255), index=True)
+    owner_id = Column(Integer, ForeignKey("users.id"))
+    owner = relationship("User", back_populates="todos")
+
 ```
 DAL (Data Access Layer) sloj, odnosno logika za manipulaciju bazom podataka je prikazan ispod: 
 
@@ -248,11 +235,40 @@ def update_user(db: Session, user_id: int, updated_user: User) -> User | None:
     return user
 ```
 
+---
+
+# Pydantic i Logfire
+FastAPI koristi standardne Python tipove podataka (int, str, float...) za definisanje tipova u aplikaciji, pa je sam kod čitljiv i lako razumljiv. 
+Zahvaljujući integraciji sa bibliotekom **Pydantic**, FastAPI pruža veoma korisne alate za jednostavnu validaciju i manipulaciju podacima. 
+Tim koji je razvio Pydantic, kreirao je još jedan alat **Logfire** čija je namena monitoring aplikacija. Logfire je dizajniran tako da bude jednostavan, a ujedno i efikasan za upotrebu. Integrisan je sa mnogim popularnim bibliotekama (FastAPI, OpenAI, sam Pydantic i dr.) što omogućava njegovu upotrebu za praćenje validacija u Pydantic-u i jasnije razumevanje zašto neki unosi ne ispunjavaju uslove validacije. 
+Primer jedne validacije korišćenjem Pydantic biblioteke: 
+
+```python 
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+from schemas.todo import Todo, TodoCreate
+from typing import List, Optional
+
+class UserBase(BaseModel):
+    email: EmailStr
+    name: str = Field(min_length=3, max_length=50)
+    
+    model_config = ConfigDict(from_attributes=True)
+
+    @field_validator("name")
+    def name_validator(cls, name: str): 
+        if not name.isalpha(): 
+            raise ValueError("Name must contain only alphabetic characters!")
+        return name
+```
+Primer nevalidnog unosa email adrese i odgovora servera: 
+![nevalidan-mejl](./fast-api/resources/images/nevalidan-mejl.png)
+![odgovor-servera](./fast-api/resources/images/odgovor-servera-nevalidan-mejl.png)
+
 ## 🎓 **Resursi za učenje**
 - [FastAPI - Zvanična dokumentacija](https://fastapi.tiangolo.com)  
 - [Primeri na GitHub-u](https://github.com/tiangolo/fastapi)  
 - [GeeksForGeeks](https://www.geeksforgeeks.org/fastapi-introduction/)
 - [Pydantic - Zvanična dokumentacija](https://docs.pydantic.dev/latest/)
-- [Microsoft Visual Studio Code](https://code.visualstudio.com/docs/python/tutorial-fastapi)
+- [SQLAlchemy - Zvanična dokumentacija](https://docs.sqlalchemy.org/en/20/orm/)
 
 ---
