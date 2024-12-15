@@ -30,7 +30,7 @@ def delete_user(db: Session, user_for_delete: User) -> bool:
     db.commit()
     return True
 
-def update_user(db: Session, user_id: int, updated_user: User) -> User:
+def update_user(db: Session, user_id: int, updated_user: User) -> User | None:
     user = find_user_by_id(db, user_id)
     if not user:
         return None
