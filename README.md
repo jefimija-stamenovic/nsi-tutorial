@@ -202,7 +202,7 @@ class User(Base):
     is_active = Column(Boolean, default=False)
     
 ```
-DAL sloj, odnosno logika za manipulaciju bazom podataka je prikazan ispod: 
+DAL (Data Access Layer) sloj, odnosno logika za manipulaciju bazom podataka je prikazan ispod: 
 
 ```python 
 from sqlalchemy.orm import Session
