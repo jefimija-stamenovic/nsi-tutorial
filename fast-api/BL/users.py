@@ -1,9 +1,7 @@
 import DAL.users as db_service
 import schemas.user as schemas
-
 from sqlalchemy.orm import Session
 from typing import Sequence
-
 
 def get_users(db: Session, 
               skip:int=0, 
@@ -28,13 +26,12 @@ def create_user(db: Session, user: schemas.UserCreate):
     existing_user = get_user_by_email(db, user.email)
     if existing_user:
         raise Exception("There has been already registrated user with this email")
-    return db_service.create_user(db, user)
+    return db_service.create_user(db, user.model_dump(exclude_unset=False))
     #return db_service.create_user(db, user)
 
-def delete_user(db: Session, user_id: int) -> schemas.User: 
+def delete_user(db: Session, user_id: int) -> int: 
     try:
-        user_for_delete = find_user_by_id(db, user_id)
-        deleted = db_service.delete_user(db, user_for_delete)
+        deleted = db_service.delete_user(db, user_id)
         if not deleted: 
             raise Exception(f"An error occurred. User with ID {user_id} has not been deleted")
         return deleted

@@ -1,7 +1,7 @@
 # 🌟 Python FastAPI - Tutorijal
 
 ## Problematika ##
-FastAPI je Python framework kreiran sa ciljem da ubrza razvoj i unapredi kvalitet web API server-a. Sam razvoj API-ja uključuje različite izazove poput ručne validacije podataka, održavanja dokumentacije i postizanja visokih performansi naročito pri obradi velikih količina zahteva. 
+FastAPI je Python framework kreiran sa ciljem da ubrza razvoj i unapredi kvalitet API-a. Sam razvoj API-ja uključuje različite izazove poput ručne validacije podataka, održavanja dokumentacije i postizanja visokih performansi naročito pri obradi velikih količina zahteva. 
 FastAPI rešava ove probleme jer pruža automatsku validaciju, automatsko generisanje dokumentacije u realnom vremenu i podršku za asinhroni rad. Pored toga, FastAPI koristi Python tipove za tipsku sigurnost čime se smanjuje broj grešaka i povećava pouzdanost koda čineći sam razvoj efikasnijim i manje podložnim greškama.  
 
 ---
@@ -245,6 +245,7 @@ DAL (Data Access Layer) sloj koji služi za manipulaciju podacima iz baze podata
 from sqlalchemy.orm import Session
 from models.user import User
 from models.todo import Todo as TodoModel
+from typing import Dict, Any
 
 def find_user_by_id(db:Session, user_id: int) -> User:
     return db.query(User).filter(User.id == user_id).first()
@@ -255,26 +256,27 @@ def get_user_by_email(db: Session, email: str):
 def get_users(db: Session, skip:int=0, limit:int=100):
     return db.query(User).offset(skip).limit(limit).all()
 
-def create_user(db: Session, user: User) -> User:
-    db_user = User(email=user.email, name=user.name, is_active=True)
+def create_user(db: Session, user: Dict[str, Any]) -> User:
+    db_user = User(email=user['email'], name=user['name'], is_active=True)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
 
-    if user.todos:
-        todos = [TodoModel(title=todo.title, description=todo.description, owner_id=db_user.id) for todo in user.todos]
+    if user['todos']:
+        todos = [TodoModel(title=todo['title'], description=todo['description'], owner_id=db_user.id) for todo in user['todos']]
         db.add_all(todos)
         db.commit()
 
     db.refresh(db_user)
     return db_user
 
-def delete_user(db: Session, user_for_delete: User) -> bool:
+def delete_user(db: Session, user_id: int) -> bool:
+    user_for_delete = find_user_by_id(db, user_id)
     db.delete(user_for_delete)
     db.commit()
     return True
 
-def update_user(db: Session, user_id: int, updated_user: User) -> User | None:
+def update_user(db: Session, user_id: int, updated_user: Dict[str, Any]) -> User | None:
     user = find_user_by_id(db, user_id)
     if not user:
         return None
@@ -288,12 +290,10 @@ def update_user(db: Session, user_id: int, updated_user: User) -> User | None:
 Ovaj sloj služi za implementiranje pravila poslovanja i funkcionalnosti aplikacije. Preuzima podatke od sloja iznad sebe - UI, a prosleđuje ih sloju ispod sebe - DAL. BL sloj je uglavnom sloj u kom su definisani servisi koji pozivaju DAL sloj i sprovode validaciju, transformaciju ili neku drugu logiku nad preuzetim podacima. 
 Primer BL sloja: 
 ```python 
-
 import DAL.users as db_service
 import schemas.user as schemas
 from sqlalchemy.orm import Session
 from typing import Sequence
-
 
 def get_users(db: Session, 
               skip:int=0, 
@@ -318,13 +318,12 @@ def create_user(db: Session, user: schemas.UserCreate):
     existing_user = get_user_by_email(db, user.email)
     if existing_user:
         raise Exception("There has been already registrated user with this email")
-    return db_service.create_user(db, user)
+    return db_service.create_user(db, user.model_dump(exclude_unset=False))
     #return db_service.create_user(db, user)
 
-def delete_user(db: Session, user_id: int) -> schemas.User: 
+def delete_user(db: Session, user_id: int) -> int: 
     try:
-        user_for_delete = find_user_by_id(db, user_id)
-        deleted = db_service.delete_user(db, user_for_delete)
+        deleted = db_service.delete_user(db, user_id)
         if not deleted: 
             raise Exception(f"An error occurred. User with ID {user_id} has not been deleted")
         return deleted
@@ -345,7 +344,83 @@ def update_user(db: Session, user_id: int, user_data: schemas.UserUpdate):
         raise e
 ``` 
 
+### User Interfase Layer(UI)
+Ovaj sloj predstavlja korisnički interfejs i njegova glavna funkcija je ostvarivanje interakcije korisnika sa aplikacojom. Prosleđuje korisničke zahteve BL sloju i prikazuje dobijene povratne rezultate od njega. 
+Primer UI sloja: 
+```python 
+from fastapi import APIRouter, HTTPException, Depends
+from http import HTTPStatus
+from sqlalchemy.orm import Session
+from DAL.dependency import get_db
+import schemas.user as schemas
+import BL.users as service
 
+router = APIRouter(prefix="/users", tags=["Users"])
+
+@router.get('/',
+        response_model=list[schemas.User], 
+        name="List of all users",
+        description="API returns all registrated users."
+        )
+def get_all_users(skip:int = 0, 
+                  limit:int = 100, 
+                  db: Session = Depends(get_db)): 
+    return service.get_users(db, skip, limit)
+
+@router.get('/{user_id}', 
+            response_model=schemas.User, 
+            status_code=HTTPStatus.OK, 
+            name="Find user by ID", 
+            description="API returns user object by ID")
+def find_user_by_id(user_id: int, 
+                    db: Session = Depends(get_db)) -> schemas.User:
+    try:
+        user = service.find_user_by_id(db, user_id)
+        return user
+    except Exception as e:
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, 
+            detail=str(e)
+        )
+    
+@router.post('/', 
+             response_model = schemas.UserCreate, 
+             status_code=HTTPStatus.CREATED, 
+             name="Add user", 
+             description="The API adds a user and returns an object with information about the new user if it was successfully added")
+def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    return service.create_user(db, user)
+
+@router.delete('/',  
+               status_code=HTTPStatus.NO_CONTENT, 
+               name="Delete user", 
+               description="The API deletes user by ID")
+def delete_user(user_id : int, 
+                db: Session = Depends(get_db)): 
+    try: 
+        service.delete_user(db, user_id)
+    except Exception as e: 
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, 
+            detail=str(e)
+        )
+    
+@router.put("/{user_id}", 
+            status_code = HTTPStatus.OK, 
+            response_model=schemas.UserUpdate, 
+            name = "Update user", 
+            description="The API update user by ID")
+def update_user(user_id: int, user_data: schemas.UserUpdate, 
+                db: Session = Depends(get_db)):
+    try:
+        updated_user = service.update_user(db, user_id, user_data)
+        return updated_user
+    except Exception as e: 
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, 
+            detail=str(e)
+        )
+```
 ---
 
 # Pydantic i Logfire

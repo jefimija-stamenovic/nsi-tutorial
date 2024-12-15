@@ -24,5 +24,11 @@ class User(UserBase):
 
 class UserUpdate(BaseModel):
     name: Optional[str]
-    email: Optional[str]
+    email: Optional[EmailStr]
     is_active: Optional[bool]
+
+    @field_validator("name")
+    def name_validator(cls, name: str): 
+        if not name.isalpha(): 
+            raise ValueError("Name must contain only alphabetic characters!")
+        return name

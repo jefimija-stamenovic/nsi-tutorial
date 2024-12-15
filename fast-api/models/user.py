@@ -9,4 +9,3 @@ class User(Base):
     email = Column(String(255), unique=True, index=True)
     todos = relationship("Todo", back_populates="owner", cascade="all, delete")
     is_active = Column(Boolean, default=False)
-    
