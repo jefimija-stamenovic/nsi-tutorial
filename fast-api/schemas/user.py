@@ -1,12 +1,18 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 from schemas.todo import Todo, TodoCreate
 from typing import List, Optional
 
 class UserBase(BaseModel):
-    email: str
-    name: str
+    email: EmailStr
+    name: str = Field(min_length=3, max_length=50)
+    
     model_config = ConfigDict(from_attributes=True)
 
+    @field_validator("name")
+    def name_validator(cls, name: str): 
+        if not name.isalpha(): 
+            raise ValueError("Name must contain only alphabetic characters!")
+        return name
 class UserCreate(UserBase):
     todos: List[TodoCreate] = []
 

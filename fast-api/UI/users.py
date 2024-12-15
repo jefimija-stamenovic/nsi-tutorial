@@ -39,13 +39,7 @@ def find_user_by_id(user_id: int,
              name="Add user", 
              description="The API adds a user and returns an object with information about the new user if it was successfully added")
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    try: 
-        return service.create_user(db, user)
-    except Exception as e: 
-        raise HTTPException(
-            status_code=HTTPStatus.INTERNAL_SERVER_ERROR, 
-            detail=str(e)
-        )
+    return service.create_user(db, user)
 
 @router.delete('/',  
                status_code=HTTPStatus.NO_CONTENT, 

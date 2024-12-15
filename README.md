@@ -136,6 +136,25 @@ Arhitekturu možemo da podelimo na nekoliko segmenata:
 FastAPI koristi standardne Python tipove podataka (int, str, float...) za definisanje tipova u aplikaciji, pa je sam kod čitljiv i lako razumljiv. 
 Zahvaljujući integraciji sa bibliotekom **Pydantic**, FastAPI pruža veoma korisne alate za jednostavnu validaciju i manipulaciju podacima. 
 Tim koji je razvio Pydantic, kreirao je još jedan alat **Logfire** čija je namena monitoring aplikacija. Logfire je dizajniran tako da bude jednostavan, a ujedno i efikasan za upotrebu. Integrisan je sa mnogim popularnim bibliotekama (FastAPI, OpenAI, sam Pydantic i dr.) što omogućava njegovu upotrebu za praćenje validacija u Pydantic-u i jasnije razumevanje zašto neki unosi ne ispunjavaju uslove validacije. 
+Primer jedne validacije korišćenjem Pydantic biblioteke: 
+
+```python 
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+from schemas.todo import Todo, TodoCreate
+from typing import List, Optional
+
+class UserBase(BaseModel):
+    email: EmailStr
+    name: str = Field(min_length=3, max_length=50)
+    
+    model_config = ConfigDict(from_attributes=True)
+
+    @field_validator("name")
+    def name_validator(cls, name: str): 
+        if not name.isalpha(): 
+            raise ValueError("Name must contain only alphabetic characters!")
+        return name
+```
 
 ## 🎓 **Resursi za učenje**
 - [FastAPI - Zvanična dokumentacija](https://fastapi.tiangolo.com)  
