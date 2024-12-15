@@ -185,6 +185,24 @@ PORT = 8000
 ```
 U .env fajlu se, osim DB_URL konstante, nalaze i HOST i PORT konstante kojima se definišu host i port za pokretanje servera. One se učitavaju u main.py fajlu, tako da slobodno možete da ih promenite ukoliko želite da Vaš server radi na nekom drugom portu ili ukoliko želite da bude javno dostupan. 
 
+# SQLAlchemy ORM 
+
+Primer kreiranja jedne tabele korišćenjem biblioteke SQLAlchemy
+```python 
+from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy.orm import relationship
+from database import Base
+
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), index=True)
+    email = Column(String(255), unique=True, index=True)
+    todos = relationship("Todo", back_populates="owner", cascade="all, delete")
+    is_active = Column(Boolean, default=False)
+    
+```
+
 ## 🎓 **Resursi za učenje**
 - [FastAPI - Zvanična dokumentacija](https://fastapi.tiangolo.com)  
 - [Primeri na GitHub-u](https://github.com/tiangolo/fastapi)  
