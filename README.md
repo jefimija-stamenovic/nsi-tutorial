@@ -204,11 +204,12 @@ U .env fajlu se, osim DB_URL konstante, nalaze i HOST i PORT konstante kojima se
 
 # SQLAlchemy ORM 
 SQLAlchemy je Python biblioteka za rad sa bazama podataka i u kombinaciji sa FastAPI-em omogućava efikasno upravljanje podacima. SQLAlchemy ima podršku za Object-Relational Mapping (ORM), pa samim tim omogućava mapiranje klasa na tabele u bazi. FastAPI koristi SQLAlchemy za: 
-- definisanje modela - klase se mapiraju na tabele u bazi podataka 
-- upravljanje sesijama - u sklopu biblioteke SQLAlchemy, postoji implementirana klasa Session koja služi za transakcije i rad sa bazom 
-- CRUD operacije - kreiranje, čitanje, ažuriranje i brisanje podataka 
+- **definisanje modela** - klase se mapiraju na tabele u bazi podataka 
+- **upravljanje sesijama** - u sklopu biblioteke SQLAlchemy, postoji implementirana klasa Session koja služi za transakcije i rad sa bazom 
+- **CRUD operacije** - kreiranje, čitanje, ažuriranje i brisanje podataka 
 
-Primer kreiranja jedne tabele korišćenjem biblioteke SQLAlchemy
+Kod ispod prikazuje kako su kreirane dve tabele upotrebom SQLALchemy ORM-a. Za svaku klasu se definiše naziv tabele u bazi koju reprezentuje. Nakon toga se definišu nazivi kolona, njihovi tipovi, da li su primarni ključ, indeksieane i jedinstvene. Takođe, 
+definišu se veze među tabelama pomoću **relationship**
 ```python 
 from sqlalchemy import Boolean, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
@@ -229,10 +230,17 @@ class Todo(Base):
     description = Column(String(255), index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
     owner = relationship("User", back_populates="todos")
-
 ```
-DAL (Data Access Layer) sloj, odnosno logika za manipulaciju bazom podataka je prikazan ispod: 
+Za Todo tabelu je karakteristično da ima referencu na tabelu Users jer zadatak pripada nekom korisniku. Zato je potrebno kaskadno brisanje kada se obriše korisnik što je definisano na tabeli Users sa  
 
+```python 
+back_populates="owner", cascade="all, delete")
+```
+## Troslojna arhitektura ##
+
+### Data Access Layer (DAL)
+DAL (Data Access Layer) sloj koji služi za manipulaciju podacima iz baze podataka. Komunicira direktno sa bazom i izvršava CRUD operacije.
+DAL sloj za manipulaciju korisnicima: 
 ```python 
 from sqlalchemy.orm import Session
 from models.user import User
