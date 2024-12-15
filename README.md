@@ -155,6 +155,9 @@ class UserBase(BaseModel):
             raise ValueError("Name must contain only alphabetic characters!")
         return name
 ```
+Primer nevalidnog unosa email adrese i odgovora servera: 
+![nevalidan-mejl](./fast-api/resources/images/nevalidan-mejl.png)
+![odgovor-servera](./fast-api/resources/images/odgovor-servera-nevalidan-mejl.png)
 
 ## 🎓 **Resursi za učenje**
 - [FastAPI - Zvanična dokumentacija](https://fastapi.tiangolo.com)  
